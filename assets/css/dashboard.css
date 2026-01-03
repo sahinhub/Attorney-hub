@@ -1,0 +1,42 @@
+/* Attorney Hub Dashboard Styles */
+
+.attorney-hub-membership-tab,
+.attorney-hub-billing-tab,
+.attorney-hub-my-complaints-tab,
+.attorney-hub-complaints-against-me-tab {
+  padding: 20px 0;
+}
+
+.attorney-hub-membership-info {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+}
+
+.attorney-hub-membership-info p {
+  margin: 10px 0;
+}
+
+.attorney-hub-membership-info strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.attorney-hub-verified-badge {
+  display: inline-block;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+/* Responsive Dashboard */
+@media (max-width: 768px) {
+  .attorney-hub-membership-info {
+    padding: 12px;
+  }
+}
