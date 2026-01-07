@@ -37,6 +37,39 @@ define('ATTORNEY_HUB_PATH', plugin_dir_path(__FILE__));
 define('ATTORNEY_HUB_URL', plugin_dir_url(__FILE__));
 define('ATTORNEY_HUB_ASSETS_URL', ATTORNEY_HUB_URL . 'assets/');
 define('ATTORNEY_HUB_INCLUDES_PATH', ATTORNEY_HUB_PATH . 'includes/');
+define('ATTORNEY_HUB_DASHBOARD_ID', 1269);
+
+// Load simple functional files first (before class-based architecture)
+require_once ATTORNEY_HUB_INCLUDES_PATH . 'helpers.php';
+require_once ATTORNEY_HUB_INCLUDES_PATH . 'capabilities.php';
+require_once ATTORNEY_HUB_INCLUDES_PATH . 'complaints.php';
+require_once ATTORNEY_HUB_INCLUDES_PATH . 'shortcodes.php';
+
+// Enqueue dashboard assets
+add_action('wp_enqueue_scripts', 'aah_enqueue_dashboard_assets');
+function aah_enqueue_dashboard_assets() {
+    if (is_page(ATTORNEY_HUB_DASHBOARD_ID)) {
+        wp_enqueue_style(
+            'aah-dashboard', 
+            ATTORNEY_HUB_URL . 'assets/css/dashboard.css', 
+            [], 
+            ATTORNEY_HUB_VERSION
+        );
+        
+        wp_enqueue_script(
+            'aah-dashboard', 
+            ATTORNEY_HUB_URL . 'assets/js/dashboard.js', 
+            ['jquery'], 
+            ATTORNEY_HUB_VERSION, 
+            true
+        );
+        
+        wp_localize_script('aah-dashboard', 'aahData', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('aah_nonce')
+        ]);
+    }
+}
 
 /**
  * Include the autoloader
@@ -87,14 +120,17 @@ class Attorney_Hub {
 	 * @since 1.0.0
 	 */
 	private function __construct() {
-		// Initialize autoloader
-		Attorney_Hub_Autoloader::init();
-
 		// Check dependencies
 		$this->check_dependencies();
 
-		// Hook initialization
-		add_action('plugins_loaded', array($this, 'init'), 10);
+		if ($this->dependencies_met) {
+			// Initialize autoloader only if dependencies are met
+			require_once ATTORNEY_HUB_INCLUDES_PATH . 'class-autoloader.php';
+			Attorney_Hub_Autoloader::init();
+
+			// Hook initialization
+			add_action('plugins_loaded', array($this, 'init'), 10);
+		}
 	}
 
 	/**
@@ -144,16 +180,23 @@ class Attorney_Hub {
 	 * @return void
 	 */
 	public function init() {
+		error_log('ATTORNEY HUB: Plugin init() started');
+		
 		if (!$this->dependencies_met) {
+			error_log('ATTORNEY HUB: Dependencies not met, aborting');
 			return;
 		}
 
+		error_log('ATTORNEY HUB: Dependencies met, proceeding');
+		
 		// Register plugin activation/deactivation hooks
 		register_activation_hook(ATTORNEY_HUB_PLUGIN_FILE, array($this, 'activate_plugin'));
 		register_deactivation_hook(ATTORNEY_HUB_PLUGIN_FILE, array($this, 'deactivate_plugin'));
 
 		// Initialize core modules
+		error_log('ATTORNEY HUB: Loading modules');
 		$this->load_modules();
+		error_log('ATTORNEY HUB: Modules loaded');
 	}
 
 	/**
@@ -295,3 +338,5 @@ function attorney_hub() {
 
 // Bootstrap the plugin
 attorney_hub();
+file_put_contents(WP_CONTENT_DIR . '/attorney-hub-test.log', date('Y-m-d H:i:s') . " - Plugin file loaded\n", FILE_APPEND);
+

@@ -1,42 +1,475 @@
-/* Attorney Hub Dashboard Styles */
+/**
+ * Attorney Hub - Dashboard Styles
+ */
 
-.attorney-hub-membership-tab,
-.attorney-hub-billing-tab,
-.attorney-hub-my-complaints-tab,
-.attorney-hub-complaints-against-me-tab {
-  padding: 20px 0;
+/* General Dashboard Styles */
+.aah-membership-tab,
+.aah-billing-tab,
+.aah-complaints-tab,
+.aah-attorney-complaints-tab {
+    padding: 20px;
 }
 
-.attorney-hub-membership-info {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 4px;
-  margin: 15px 0;
+/* Membership Cards */
+.aah-memberships-list {
+    margin-bottom: 20px;
 }
 
-.attorney-hub-membership-info p {
-  margin: 10px 0;
+.aah-membership-card {
+    background: #fff;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 20px;
 }
 
-.attorney-hub-membership-info strong {
-  color: #333;
-  font-weight: 600;
+.aah-membership-card.active {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
 }
 
-.attorney-hub-verified-badge {
-  display: inline-block;
-  background-color: #d4edda;
-  color: #155724;
-  padding: 3px 8px;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-left: 5px;
+.aah-membership-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
 }
 
-/* Responsive Dashboard */
+.aah-membership-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #222;
+}
+
+.aah-status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.aah-status-badge.status-active,
+.aah-status-badge.status-complete {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.aah-status-badge.status-pending,
+.aah-status-badge.status-under_review {
+    background: #FFF3E0;
+    color: #E65100;
+}
+
+.aah-status-badge.status-resolved {
+    background: #E3F2FD;
+    color: #1565C0;
+}
+
+.aah-status-badge.status-dismissed,
+.aah-status-badge.status-cancelled {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+.aah-membership-details {
+    margin-bottom: 20px;
+}
+
+.aah-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.aah-detail-row .label {
+    color: #666;
+    font-size: 14px;
+}
+
+.aah-detail-row .value {
+    color: #222;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.aah-membership-benefits {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.aah-membership-benefits h4 {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    color: #444;
+}
+
+.aah-membership-benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.aah-membership-benefits li {
+    padding: 6px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.aah-membership-benefits li i {
+    color: #4CAF50;
+    margin-right: 8px;
+}
+
+/* Billing Table */
+.aah-table-responsive {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.aah-billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+}
+
+.aah-billing-table th {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: #444;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e8e8e8;
+}
+
+.aah-billing-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.aah-billing-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.aah-invoice-link {
+    color: #1976D2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.aah-invoice-link:hover {
+    text-decoration: underline;
+}
+
+/* Complaints */
+.aah-complaints-list {
+    margin-bottom: 20px;
+}
+
+.aah-complaint-item {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.aah-complaint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.aah-complaint-header h3,
+.aah-complaint-header h4 {
+    margin: 0 0 8px 0;
+    font-size: 17px;
+    color: #222;
+}
+
+.aah-complaint-meta {
+    color: #666;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.aah-complaint-meta i {
+    margin-right: 5px;
+}
+
+.aah-complaint-content {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.aah-complaint-evidence {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.aah-complaint-evidence i {
+    margin-right: 5px;
+}
+
+/* Stats Cards */
+.aah-stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.aah-stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.aah-stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.aah-stat-label {
+    font-size: 13px;
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+/* Empty States */
+.aah-empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.aah-empty-state.success {
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+.aah-empty-state i {
+    font-size: 60px;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.aah-empty-state.success i {
+    color: #4CAF50;
+}
+
+.aah-empty-state h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.aah-empty-state p {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 15px;
+}
+
+/* Buttons */
+.aah-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+}
+
+.aah-btn i {
+    margin-right: 5px;
+}
+
+.aah-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.aah-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.aah-btn-secondary {
+    background: #fff;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.aah-btn-secondary:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+.aah-btn-lg {
+    padding: 12px 30px;
+    font-size: 16px;
+}
+
+/* Complaint Form */
+.aah-complaint-form-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.aah-complaint-form-wrapper h2 {
+    margin-bottom: 10px;
+}
+
+.aah-complaint-form-wrapper > p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.aah-form-group {
+    margin-bottom: 20px;
+}
+
+.aah-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.aah-form-group .required {
+    color: #d32f2f;
+}
+
+.aah-form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.aah-form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.aah-form-help {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    color: #666;
+}
+
+.aah-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+/* Notices */
+.aah-notice {
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.aah-notice-success {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border-left: 4px solid #4CAF50;
+}
+
+.aah-notice-error {
+    background: #FFEBEE;
+    color: #C62828;
+    border-left: 4px solid #f44336;
+}
+
+.aah-upgrade-notice {
+    background: #FFF3E0;
+    border: 2px solid #FFB74D;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Membership Actions */
+.aah-membership-actions,
+.aah-no-membership {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.aah-membership-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .attorney-hub-membership-info {
-    padding: 12px;
-  }
+    .aah-membership-header,
+    .aah-complaint-header {
+        flex-direction: column;
+    }
+    
+    .aah-status-badge {
+        margin-top: 10px;
+    }
+    
+    .aah-billing-table thead {
+        display: none;
+    }
+    
+    .aah-billing-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+    }
+    
+    .aah-billing-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+    
+    .aah-billing-table td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #444;
+    }
+    
+    .aah-membership-actions,
+    .aah-form-actions {
+        flex-direction: column;
+    }
+    
+    .aah-btn {
+        width: 100%;
+    }
 }
