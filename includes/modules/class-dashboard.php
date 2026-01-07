@@ -57,14 +57,19 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	 * @return void
 	 */
 	protected function init() {
+		// Debug: Check if module is being initialized
+		if (WP_DEBUG && current_user_can('administrator')) {
+			error_log('Attorney Hub: Dashboard module initialized');
+		}
+
 		// Redirect MemberPress account page to Directorist dashboard
 		add_action('template_redirect', array($this, 'redirect_memberpress_account'));
 
-		// Add custom tabs to dashboard
-		add_filter('atbdp_user_nav_items', array($this, 'add_custom_dashboard_tabs'), 20);
+		// Add custom tabs to dashboard - using only the primary Directorist hooks
+		add_filter('directorist_dashboard_nav_items', array($this, 'add_custom_dashboard_tabs'), 20);
 
 		// Render tab content
-		add_action('atbdp_dashboard_tab_content', array($this, 'render_tab_content'), 10);
+		add_action('directorist_dashboard_content', array($this, 'render_tab_content'), 10);
 
 		// Enqueue dashboard styles
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_dashboard_styles'));
@@ -113,44 +118,49 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	 * @return array
 	 */
 	public function add_custom_dashboard_tabs($nav_items) {
+		// Debug: Log that this function is being called
+		if (WP_DEBUG && current_user_can('administrator')) {
+			error_log('Attorney Hub: add_custom_dashboard_tabs function called');
+			error_log('Attorney Hub: Current nav_items: ' . print_r(array_keys($nav_items), true));
+		}
+
 		$user_id = get_current_user_id();
 
-		if (!$user_id) {
-			return $nav_items;
-		}
-
-		$dashboard_url = get_permalink(self::DASHBOARD_PAGE_ID);
-
-		if (!$dashboard_url) {
-			return $nav_items;
-		}
-
-		// Add Membership tab (available to all users)
+		// Add Membership tab
 		$nav_items['ah_membership'] = array(
 			'label' => __('Membership', 'attorney-hub'),
-			'url' => add_query_arg('tab', 'ah_membership', $dashboard_url),
+			'icon'  => '', // No icon to bypass Directorist's icon system
+			'target' => 'dashboard_membership',
 		);
 
 		// Add Billing History tab
 		$nav_items['ah_billing'] = array(
 			'label' => __('Billing History', 'attorney-hub'),
-			'url' => add_query_arg('tab', 'ah_billing', $dashboard_url),
+			'icon'  => '', // No icon to bypass Directorist's icon system
+			'target' => 'dashboard_billing',
 		);
 
-		// Add My Complaints tab (for verified reviewers and above)
-		if (Attorney_Hub_Capability_Manager::user_can($user_id, 'file_attorney_complaint')) {
-			$nav_items['ah_my_complaints'] = array(
+		// Add My Complaints tab
+		if (function_exists('aah_can_file_complaints') && aah_can_file_complaints($user_id)) {
+			$nav_items['ah_complaints'] = array(
 				'label' => __('My Complaints', 'attorney-hub'),
-				'url' => add_query_arg('tab', 'ah_my_complaints', $dashboard_url),
+				'icon'  => '', // No icon to bypass Directorist's icon system
+				'target' => 'dashboard_complaints',
 			);
 		}
 
-		// Add Complaints Against Me tab (for attorneys)
-		if (Attorney_Hub_Capability_Manager::user_can($user_id, 'manage_attorney_profile')) {
-			$nav_items['ah_complaints_against_me'] = array(
+		// Add Complaints Against Me tab
+		if (function_exists('aah_is_attorney_pro') && aah_is_attorney_pro($user_id)) {
+			$nav_items['ah_complaints_received'] = array(
 				'label' => __('Complaints Against Me', 'attorney-hub'),
-				'url' => add_query_arg('tab', 'ah_complaints_against_me', $dashboard_url),
+				'icon'  => '', // No icon to bypass Directorist's icon system
+				'target' => 'dashboard_complaints_received',
 			);
+		}
+
+		// Debug: Log the updated nav_items
+		if (WP_DEBUG && current_user_can('administrator')) {
+			error_log('Attorney Hub: Updated nav_items: ' . print_r(array_keys($nav_items), true));
 		}
 
 		return $nav_items;
@@ -163,26 +173,22 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	 *
 	 * @since 1.0.0
 	 * 
-	 * @param string $active_tab The active tab slug
 	 * @return void
 	 */
-	public function render_tab_content($active_tab) {
-		switch ($active_tab) {
-			case 'ah_membership':
-				$this->render_membership_tab();
-				break;
+	public function render_tab_content() {
+		$custom_tabs = array(
+			'dashboard_membership'          => 'tab-membership.php',
+			'dashboard_billing'             => 'tab-billing.php',
+			'dashboard_complaints'          => 'tab-complaints.php',
+			'dashboard_complaints_received' => 'tab-complaints-received.php',
+		);
 
-			case 'ah_billing':
-				$this->render_billing_tab();
-				break;
-
-			case 'ah_my_complaints':
-				$this->render_my_complaints_tab();
-				break;
-
-			case 'ah_complaints_against_me':
-				$this->render_complaints_against_me_tab();
-				break;
+		foreach ($custom_tabs as $id => $template) {
+			echo '<div class="directorist-tab__pane" id="' . esc_attr($id) . '" style="display:none;">';
+			if (function_exists('aah_get_template')) {
+				aah_get_template($template);
+			}
+			echo '</div>';
 		}
 	}
 

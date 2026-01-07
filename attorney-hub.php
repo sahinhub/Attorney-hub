@@ -42,8 +42,8 @@ define('ATTORNEY_HUB_DASHBOARD_ID', 1269);
 // Load simple functional files first (before class-based architecture)
 require_once ATTORNEY_HUB_INCLUDES_PATH . 'helpers.php';
 require_once ATTORNEY_HUB_INCLUDES_PATH . 'capabilities.php';
-require_once ATTORNEY_HUB_INCLUDES_PATH . 'dashboard-tabs.php';
 require_once ATTORNEY_HUB_INCLUDES_PATH . 'complaints.php';
+require_once ATTORNEY_HUB_INCLUDES_PATH . 'shortcodes.php';
 
 // Enqueue dashboard assets
 add_action('wp_enqueue_scripts', 'aah_enqueue_dashboard_assets');
