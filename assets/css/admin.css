@@ -1,0 +1,79 @@
+/* Attorney Hub Admin Styles */
+
+.attorney-hub-admin-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.attorney-hub-notice {
+  padding: 12px 15px;
+  margin: 15px 0;
+  border-left: 4px solid;
+  background-color: #fff;
+}
+
+.attorney-hub-notice-success {
+  border-color: #28a745;
+  color: #155724;
+}
+
+.attorney-hub-notice-error {
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.attorney-hub-notice-warning {
+  border-color: #ffc107;
+  color: #856404;
+}
+
+.attorney-hub-settings-panel {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.attorney-hub-settings-panel h2 {
+  margin-top: 0;
+  color: #23282d;
+}
+
+.attorney-hub-settings-panel .form-table {
+  margin: 20px 0 0 0;
+}
+
+.attorney-hub-status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.attorney-hub-status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.attorney-hub-status-badge.approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.attorney-hub-status-badge.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.attorney-hub-post-actions {
+  margin: 15px 0;
+}
+
+.attorney-hub-post-actions .button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
