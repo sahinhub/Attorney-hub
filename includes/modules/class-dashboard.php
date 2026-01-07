@@ -8,6 +8,25 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	public function __construct() {
 		$this->module_name = 'Dashboard';
 		
+		// #region agent log
+		$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+		if (!is_dir($log_dir)) {
+			@mkdir($log_dir, 0755, true);
+		}
+		$log_file = $log_dir . '/debug.log';
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_constructor',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:8',
+			'message' => 'Dashboard constructor called',
+			'data' => ['module_name' => $this->module_name],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H4'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		// CRITICAL: Log constructor execution
 		error_log('=================================');
 		error_log('ATTORNEY HUB: Dashboard constructor called');
@@ -34,6 +53,25 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	}
 
 	protected function init() {
+		// #region agent log
+		$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+		if (!is_dir($log_dir)) {
+			@mkdir($log_dir, 0755, true);
+		}
+		$log_file = $log_dir . '/debug.log';
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_init',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:36',
+			'message' => 'Dashboard init() called',
+			'data' => ['module_name' => $this->module_name],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H4'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		error_log('ATTORNEY HUB: Dashboard init() called!');
 		
 		// Test if hooks work
@@ -51,6 +89,24 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 		
 		foreach ($hooks as $hook) {
 			add_filter($hook, array($this, 'add_custom_dashboard_tabs'), 5);
+			// #region agent log
+			$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+			if (!is_dir($log_dir)) {
+				@mkdir($log_dir, 0755, true);
+			}
+			$log_file = $log_dir . '/debug.log';
+			$log_entry = json_encode([
+				'id' => 'log_' . time() . '_hook_' . uniqid(),
+				'timestamp' => time() * 1000,
+				'location' => 'class-dashboard.php:53',
+				'message' => 'Registered filter hook',
+				'data' => ['hook_name' => $hook, 'priority' => 5],
+				'sessionId' => 'debug-session',
+				'runId' => 'run1',
+				'hypothesisId' => 'H1'
+			]) . "\n";
+			@file_put_contents($log_file, $log_entry, FILE_APPEND);
+			// #endregion
 			error_log('ATTORNEY HUB: Added filter for hook: ' . $hook);
 		}
 
@@ -71,19 +127,80 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 		// Test hook to see if we're on the right page
 		add_action('wp', array($this, 'detect_dashboard_page'));
 		
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_init_complete',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:74',
+			'message' => 'Dashboard init() completed',
+			'data' => ['hooks_registered' => count($hooks), 'content_hooks_registered' => count($content_hooks)],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H4'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		error_log('ATTORNEY HUB: Dashboard init() completed');
 	}
 	
 	public function detect_dashboard_page() {
+		// #region agent log
+		$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+		if (!is_dir($log_dir)) {
+			@mkdir($log_dir, 0755, true);
+		}
+		$log_file = $log_dir . '/debug.log';
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_detect_dashboard',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:77',
+			'message' => 'detect_dashboard_page() called',
+			'data' => [],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H1,H2'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		global $post;
 		
 		if (!$post) {
+			// #region agent log
+			$log_entry = json_encode([
+				'id' => 'log_' . time() . '_no_post',
+				'timestamp' => time() * 1000,
+				'location' => 'class-dashboard.php:80',
+				'message' => 'No post object available',
+				'data' => [],
+				'sessionId' => 'debug-session',
+				'runId' => 'run1',
+				'hypothesisId' => 'H1'
+			]) . "\n";
+			@file_put_contents($log_file, $log_entry, FILE_APPEND);
+			// #endregion
 			return;
 		}
 		
+		$has_shortcode = has_shortcode($post->post_content, 'directorist_user_dashboard');
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_page_info',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:84',
+			'message' => 'Page information',
+			'data' => ['page_id' => $post->ID, 'page_title' => $post->post_title, 'has_shortcode' => $has_shortcode, 'tab_param' => isset($_GET['tab']) ? $_GET['tab'] : null],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H1,H2'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		error_log('ATTORNEY HUB: Current page ID: ' . $post->ID);
 		error_log('ATTORNEY HUB: Current page title: ' . $post->post_title);
-		error_log('ATTORNEY HUB: Has directorist shortcode: ' . (has_shortcode($post->post_content, 'directorist_user_dashboard') ? 'YES' : 'NO'));
+		error_log('ATTORNEY HUB: Has directorist shortcode: ' . ($has_shortcode ? 'YES' : 'NO'));
 		
 		// Check URL parameters
 		if (isset($_GET['tab'])) {
@@ -92,10 +209,42 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 	}
 
 	private function get_dashboard_page_id() {
+		// #region agent log
+		$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+		if (!is_dir($log_dir)) {
+			@mkdir($log_dir, 0755, true);
+		}
+		$log_file = $log_dir . '/debug.log';
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_get_dashboard_id_start',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:94',
+			'message' => 'get_dashboard_page_id() called',
+			'data' => [],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H3'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		error_log('ATTORNEY HUB: Getting dashboard page ID...');
 		
 		// Method 1: Directorist settings
 		$directorist_pages = get_option('atbdp_option');
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_directorist_option',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:98',
+			'message' => 'Checking Directorist option',
+			'data' => ['option_exists' => !empty($directorist_pages), 'has_user_dashboard' => !empty($directorist_pages['user_dashboard']), 'user_dashboard_id' => !empty($directorist_pages['user_dashboard']) ? $directorist_pages['user_dashboard'] : null],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H3'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
 		if (!empty($directorist_pages['user_dashboard'])) {
 			error_log('ATTORNEY HUB: Found dashboard page ID in Directorist settings: ' . $directorist_pages['user_dashboard']);
 			return $directorist_pages['user_dashboard'];
@@ -108,25 +257,111 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 			'post_status' => 'publish',
 		));
 		
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_search_pages',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:105',
+			'message' => 'Searching pages for shortcode',
+			'data' => ['pages_count' => count($pages)],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H3'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		foreach ($pages as $page) {
 			if (has_shortcode($page->post_content, 'directorist_user_dashboard')) {
+				// #region agent log
+				$log_entry = json_encode([
+					'id' => 'log_' . time() . '_found_page',
+					'timestamp' => time() * 1000,
+					'location' => 'class-dashboard.php:112',
+					'message' => 'Found dashboard page by shortcode',
+					'data' => ['page_id' => $page->ID, 'page_title' => $page->post_title],
+					'sessionId' => 'debug-session',
+					'runId' => 'run1',
+					'hypothesisId' => 'H3'
+				]) . "\n";
+				@file_put_contents($log_file, $log_entry, FILE_APPEND);
+				// #endregion
 				error_log('ATTORNEY HUB: Found dashboard page by shortcode: ' . $page->ID . ' - ' . $page->post_title);
 				return $page->ID;
 			}
 		}
+		
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_dashboard_not_found',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:118',
+			'message' => 'Dashboard page NOT found',
+			'data' => [],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H3'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
 		
 		error_log('ATTORNEY HUB: Dashboard page NOT found!');
 		return 0;
 	}
 
 	public function add_custom_dashboard_tabs($nav_items) {
+		// #region agent log
+		$log_dir = ATTORNEY_HUB_PATH . '.cursor';
+		if (!is_dir($log_dir)) {
+			@mkdir($log_dir, 0755, true);
+		}
+		$log_file = $log_dir . '/debug.log';
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_add_tabs_entry',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:122',
+			'message' => 'add_custom_dashboard_tabs() called',
+			'data' => ['nav_items_count' => is_array($nav_items) ? count($nav_items) : 0, 'nav_items_type' => gettype($nav_items)],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H2'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		error_log('ATTORNEY HUB: add_custom_dashboard_tabs() called!');
 		error_log('ATTORNEY HUB: Existing nav items: ' . print_r($nav_items, true));
 		
 		$user_id = get_current_user_id();
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_user_check',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:127',
+			'message' => 'User ID check',
+			'data' => ['user_id' => $user_id, 'is_logged_in' => $user_id > 0],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H2'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
 		error_log('ATTORNEY HUB: Current user ID: ' . $user_id);
 
 		if (!$user_id) {
+			// #region agent log
+			$log_entry = json_encode([
+				'id' => 'log_' . time() . '_user_not_logged_in',
+				'timestamp' => time() * 1000,
+				'location' => 'class-dashboard.php:130',
+				'message' => 'User not logged in, returning early',
+				'data' => [],
+				'sessionId' => 'debug-session',
+				'runId' => 'run1',
+				'hypothesisId' => 'H2'
+			]) . "\n";
+			@file_put_contents($log_file, $log_entry, FILE_APPEND);
+			// #endregion
 			error_log('ATTORNEY HUB: User not logged in, returning');
 			return $nav_items;
 		}
@@ -134,14 +369,54 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 		$dashboard_page_id = $this->get_dashboard_page_id();
 		$dashboard_url = get_permalink($dashboard_page_id);
 
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_dashboard_page_check',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:134',
+			'message' => 'Dashboard page detection',
+			'data' => ['dashboard_page_id' => $dashboard_page_id, 'dashboard_url' => $dashboard_url, 'url_empty' => empty($dashboard_url)],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H3'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
 		error_log('ATTORNEY HUB: Dashboard page ID: ' . $dashboard_page_id);
 		error_log('ATTORNEY HUB: Dashboard URL: ' . $dashboard_url);
 
 		if (!$dashboard_url) {
+			// #region agent log
+			$log_entry = json_encode([
+				'id' => 'log_' . time() . '_url_empty',
+				'timestamp' => time() * 1000,
+				'location' => 'class-dashboard.php:140',
+				'message' => 'Dashboard URL is empty, returning early',
+				'data' => ['dashboard_page_id' => $dashboard_page_id],
+				'sessionId' => 'debug-session',
+				'runId' => 'run1',
+				'hypothesisId' => 'H3'
+			]) . "\n";
+			@file_put_contents($log_file, $log_entry, FILE_APPEND);
+			// #endregion
 			error_log('ATTORNEY HUB: Dashboard URL is empty, returning');
 			return $nav_items;
 		}
 
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_before_tabs',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:145',
+			'message' => 'Before adding tabs',
+			'data' => ['nav_items_before' => is_array($nav_items) ? array_keys($nav_items) : []],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H2'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
+		
 		// Add test tab
 		$nav_items['ah_test'] = array(
 			'label' => '★ TEST TAB ★',
@@ -179,6 +454,20 @@ class Attorney_Hub_Module_Dashboard extends Attorney_Hub_Module {
 			);
 			error_log('ATTORNEY HUB: Added Complaints Against Me tab');
 		}
+		
+		// #region agent log
+		$log_entry = json_encode([
+			'id' => 'log_' . time() . '_after_tabs',
+			'timestamp' => time() * 1000,
+			'location' => 'class-dashboard.php:186',
+			'message' => 'After adding tabs',
+			'data' => ['nav_items_after' => is_array($nav_items) ? array_keys($nav_items) : [], 'nav_items_count' => is_array($nav_items) ? count($nav_items) : 0, 'tabs_added' => ['ah_test', 'ah_membership', 'ah_billing']],
+			'sessionId' => 'debug-session',
+			'runId' => 'run1',
+			'hypothesisId' => 'H2,H5'
+		]) . "\n";
+		@file_put_contents($log_file, $log_entry, FILE_APPEND);
+		// #endregion
 		
 		error_log('ATTORNEY HUB: Final nav items count: ' . count($nav_items));
 		error_log('ATTORNEY HUB: Final nav items: ' . print_r($nav_items, true));
