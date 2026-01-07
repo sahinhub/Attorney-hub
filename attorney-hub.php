@@ -120,14 +120,17 @@ class Attorney_Hub {
 	 * @since 1.0.0
 	 */
 	private function __construct() {
-		// Initialize autoloader
-		Attorney_Hub_Autoloader::init();
-
 		// Check dependencies
 		$this->check_dependencies();
 
-		// Hook initialization
-		add_action('plugins_loaded', array($this, 'init'), 10);
+		if ($this->dependencies_met) {
+			// Initialize autoloader only if dependencies are met
+			require_once ATTORNEY_HUB_INCLUDES_PATH . 'class-autoloader.php';
+			Attorney_Hub_Autoloader::init();
+
+			// Hook initialization
+			add_action('plugins_loaded', array($this, 'init'), 10);
+		}
 	}
 
 	/**
@@ -177,16 +180,23 @@ class Attorney_Hub {
 	 * @return void
 	 */
 	public function init() {
+		error_log('ATTORNEY HUB: Plugin init() started');
+		
 		if (!$this->dependencies_met) {
+			error_log('ATTORNEY HUB: Dependencies not met, aborting');
 			return;
 		}
 
+		error_log('ATTORNEY HUB: Dependencies met, proceeding');
+		
 		// Register plugin activation/deactivation hooks
 		register_activation_hook(ATTORNEY_HUB_PLUGIN_FILE, array($this, 'activate_plugin'));
 		register_deactivation_hook(ATTORNEY_HUB_PLUGIN_FILE, array($this, 'deactivate_plugin'));
 
 		// Initialize core modules
+		error_log('ATTORNEY HUB: Loading modules');
 		$this->load_modules();
+		error_log('ATTORNEY HUB: Modules loaded');
 	}
 
 	/**
@@ -328,3 +338,5 @@ function attorney_hub() {
 
 // Bootstrap the plugin
 attorney_hub();
+file_put_contents(WP_CONTENT_DIR . '/attorney-hub-test.log', date('Y-m-d H:i:s') . " - Plugin file loaded\n", FILE_APPEND);
+
